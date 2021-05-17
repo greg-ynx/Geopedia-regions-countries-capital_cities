@@ -12,6 +12,8 @@ def get_continents():
     answer = request.fetchall()
     return answer
 
+sql_continents = get_continents()
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -46,7 +48,6 @@ class Ui_MainWindow(object):
 
         self.comboBox_LOC = QtWidgets.QComboBox(self.verticalLayoutWidget_3)
         self.comboBox_LOC.setObjectName("comboBox_LOC")
-        sql_continents = get_continents()
         for i in range(len(sql_continents)):
             self.comboBox_LOC.addItem(sql_continents[i][0])
         self.verticalLayout_LOC.addWidget(self.comboBox_LOC)
@@ -99,6 +100,8 @@ class Ui_MainWindow(object):
 
         self.comboBox_SO_Continent = QtWidgets.QComboBox(self.verticalLayoutWidget)
         self.comboBox_SO_Continent.setObjectName("comboBox_SO_Continent")
+        for i in range(len(sql_continents)):
+            self.comboBox_SO_Continent.addItem(sql_continents[i][0])
         self.verticalLayout_SO_1.addWidget(self.comboBox_SO_Continent)
 
         self.comboBox_SO_Country = QtWidgets.QComboBox(self.verticalLayoutWidget)
@@ -149,7 +152,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Location Data browser"))
-        self.label_LOC_01.setText(_translate("MainWindow", "Select continent :"))
+        self.label_LOC_01.setText(_translate("MainWindow", "Select a continent :"))
         self.search_button_LOC.setText(_translate("MainWindow", "Search"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_LOC), _translate("MainWindow", "List of countries"))
         self.label_SO.setText(_translate("MainWindow", "Select location :"))
