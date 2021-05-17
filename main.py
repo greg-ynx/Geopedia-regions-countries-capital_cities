@@ -12,6 +12,9 @@ from mainwindow import Ui_MainWindow
     africa.get_countries()
 """
 
+connection = sqlite3.connect("bdd.db")
+cursor = connection.cursor()
+
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)

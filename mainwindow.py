@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
-
+import sqlite3
 from PyQt5 import QtCore, QtGui, QtWidgets
+from continent import Continent
+from country import Country
 
+connection = sqlite3.connect("bdd.db")
+cursor = connection.cursor()
+
+def get_continents():
+    request = cursor.execute("SELECT continent_name FROM Continents")
+    answer = request.fetchall()
+    return answer
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -37,6 +46,9 @@ class Ui_MainWindow(object):
 
         self.comboBox_LOC = QtWidgets.QComboBox(self.verticalLayoutWidget_3)
         self.comboBox_LOC.setObjectName("comboBox_LOC")
+        sql_continents = get_continents()
+        for i in range(len(sql_continents)):
+            self.comboBox_LOC.addItem(sql_continents[i][0])
         self.verticalLayout_LOC.addWidget(self.comboBox_LOC)
         # END Vertical Layout Widget LOC 1
 
@@ -146,7 +158,6 @@ class Ui_MainWindow(object):
         self.search_button_SO.setText(_translate("MainWindow", "Search"))
         self.label_SO_research_return.setText(_translate("MainWindow", "Waiting for research return..."))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_SO), _translate("MainWindow", "Search Location"))
-
 
 if __name__ == "__main__":
     import sys
