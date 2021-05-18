@@ -12,7 +12,13 @@ def get_continents():
     answer = request.fetchall()
     return answer
 
+def get_countries():
+    request = cursor.execute("SELECT country_name FROM Countries")
+    answer = request.fetchall()
+    return answer
+
 sql_continents = get_continents()
+sql_countries = get_countries()
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -48,8 +54,7 @@ class Ui_MainWindow(object):
 
         self.comboBox_LOC = QtWidgets.QComboBox(self.verticalLayoutWidget_3)
         self.comboBox_LOC.setObjectName("comboBox_LOC")
-        for i in range(len(sql_continents)):
-            self.comboBox_LOC.addItem(sql_continents[i][0])
+        self.init_combo_Box(self.comboBox_LOC, "continent")
         self.verticalLayout_LOC.addWidget(self.comboBox_LOC)
         # END Vertical Layout Widget LOC 1
 
@@ -100,12 +105,12 @@ class Ui_MainWindow(object):
 
         self.comboBox_SO_Continent = QtWidgets.QComboBox(self.verticalLayoutWidget)
         self.comboBox_SO_Continent.setObjectName("comboBox_SO_Continent")
-        for i in range(len(sql_continents)):
-            self.comboBox_SO_Continent.addItem(sql_continents[i][0])
+        self.init_combo_Box(self.comboBox_SO_Continent, "continent")
         self.verticalLayout_SO_1.addWidget(self.comboBox_SO_Continent)
 
         self.comboBox_SO_Country = QtWidgets.QComboBox(self.verticalLayoutWidget)
         self.comboBox_SO_Country.setObjectName("comboBox_SO_Country")
+        self.init_combo_Box(self.comboBox_SO_Country, "country")
         self.verticalLayout_SO_1.addWidget(self.comboBox_SO_Country)
 
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.tab_SO)
@@ -162,6 +167,26 @@ class Ui_MainWindow(object):
         self.label_SO_research_return.setText(_translate("MainWindow", "Waiting for research return..."))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_SO), _translate("MainWindow", "Search Location"))
 
+    def init_combo_Box(self, comboBox, Item_type):
+        """
+        Initializing combo box
+        :param comboBox: combo box variable
+        :param Item_type: Please input "continent" or "country"
+        :return: nothing
+        """
+
+        comboBox.addItem(None)
+        if Item_type == "continent":
+            for i in range(len(sql_continents)):
+                comboBox.addItem(sql_continents[i][0])
+        elif Item_type == "country":
+            for i in range(len(sql_countries)):
+                comboBox.addItem(sql_countries[i][0])
+        else :
+            index = comboBox.findText(None)
+            comboBox.removeItem(index)
+            print("Item_type is not 'continent' or 'country' please check your input")
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -169,4 +194,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    connection.close()
     sys.exit(app.exec_())
