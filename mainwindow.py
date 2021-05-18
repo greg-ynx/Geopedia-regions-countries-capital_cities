@@ -8,11 +8,19 @@ connection = sqlite3.connect("bdd.db")
 cursor = connection.cursor()
 
 def get_continents():
+    """
+    SQL request selecting every continents
+    :return: list of continent_name from data base "bdd.db"
+    """
     request = cursor.execute("SELECT continent_name FROM Continents")
     answer = request.fetchall()
     return answer
 
 def get_countries():
+    """
+    SQL request selecting every countries
+    :return: list of country_name from data base "bdd.db"
+    """
     request = cursor.execute("SELECT country_name FROM Countries")
     answer = request.fetchall()
     return answer
