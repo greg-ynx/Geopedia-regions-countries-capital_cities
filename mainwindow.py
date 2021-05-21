@@ -47,7 +47,7 @@ class Ui_MainWindow(object):
         self.tab_LOC = QtWidgets.QWidget()
         self.tab_LOC.setObjectName("tab_LOC")
 
-        # Vertical Layout Widget LOC 1
+        # Vertical Layout Widget LOC
         self.verticalLayoutWidget_3 = QtWidgets.QWidget(self.tab_LOC)
         self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(220, 50, 311, 71))
         self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
@@ -74,15 +74,20 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 749, 339))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+
         self.gridLayoutWidget_2 = QtWidgets.QWidget(self.scrollAreaWidgetContents)
         self.gridLayoutWidget_2.setGeometry(QtCore.QRect(10, 9, 731, 321))
         self.gridLayoutWidget_2.setObjectName("gridLayoutWidget_2")
         self.gridLayout_LOC = QtWidgets.QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout_LOC.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_LOC.setObjectName("gridLayout_LOC")
+
         self.tableView_LOC = QtWidgets.QTableView(self.gridLayoutWidget_2)
         self.tableView_LOC.setObjectName("tableView_LOC")
+        self.tableView_LOC.showGrid()
+        #self.tableView_LOC.setColumnCount(5)
         self.gridLayout_LOC.addWidget(self.tableView_LOC, 0, 0, 1, 1)
+
         self.scrollArea_LOC.setWidget(self.scrollAreaWidgetContents)
         #END Scroll Area Widget LOC
 
@@ -99,6 +104,7 @@ class Ui_MainWindow(object):
         self.tab_SO = QtWidgets.QWidget()
         self.tab_SO.setObjectName("tab_SO")
 
+        # Vertical Layout Widget SO 1
         self.verticalLayoutWidget = QtWidgets.QWidget(self.tab_SO)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(211, 91, 361, 111))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -120,6 +126,7 @@ class Ui_MainWindow(object):
         self.comboBox_SO_Country.setObjectName("comboBox_SO_Country")
         self.init_combo_Box(self.comboBox_SO_Country, "country")
         self.verticalLayout_SO_1.addWidget(self.comboBox_SO_Country)
+        # END Vertical Layout Widget SO 1
 
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.tab_SO)
         self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(150, 150, 61, 51))
