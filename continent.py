@@ -1,30 +1,42 @@
+import sqlite3
+
 class Continent:
 
-    def __init__(self, connection, name):
-        self.connection = connection
+    def __init__(self, name):
         self.name = name
-        self.cursor = self.connection.cursor()
 
     def get_id(self):
-        request = self.cursor.execute("SELECT id_continent FROM Continents WHERE continent_name = '{}'".format(self.name))
-        answer = request.fetchone()
+        self.connection = sqlite3.connect("bdd.db")
+        self.cursor = self.connection.cursor()
+        query = self.cursor.execute("SELECT id_continent FROM Continents WHERE continent_name = '{}'".format(self.name))
+        answer = query.fetchone()
+        self.connection.close()
         print(answer)
         return answer
 
     def get_countries(self):
-        request = self.cursor.execute("SELECT country_name FROM Countries WHERE country_continent = '{}'".format(self.name))
-        answer = request.fetchall()
+        self.connection = sqlite3.connect("bdd.db")
+        self.cursor = self.connection.cursor()
+        query = self.cursor.execute("SELECT country_name FROM Countries WHERE country_continent = '{}'".format(self.name))
+        answer = query.fetchall()
+        self.connection.close()
         print(answer)
         return answer
 
     def get_countries_number(self):
-        request = self.cursor.execute("SELECT number_of_countries FROM Continents WHERE continent_name = '{}'".format(self.name))
-        answer = request.fetchone()
+        self.connection = sqlite3.connect("bdd.db")
+        self.cursor = self.connection.cursor()
+        query = self.cursor.execute("SELECT number_of_countries FROM Continents WHERE continent_name = '{}'".format(self.name))
+        answer = query.fetchone()
+        self.connection.close()
         print(answer)
         return answer
 
     def get_capital_cities(self):
-        request = self.cursor.execute("SELECT country_capital_city FROM Countries WHERE country_continent = '{}'".format(self.name))
-        answer = request.fetchone()
+        self.connection = sqlite3.connect("bdd.db")
+        self.cursor = self.connection.cursor()
+        query = self.cursor.execute("SELECT country_capital_city FROM Countries WHERE country_continent = '{}'".format(self.name))
+        answer = query.fetchone()
+        self.connection.close()
         print(answer)
         return answer
