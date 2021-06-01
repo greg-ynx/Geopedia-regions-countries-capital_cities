@@ -4,32 +4,37 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from continent import Continent
 from country import Country
 
-connection = sqlite3.connect("bdd.db")
-cursor = connection.cursor()
 
-def get_continents():
-    """
-    SQL request selecting every continents
-    :return: list of continent_name from data base "bdd.db"
-    """
-    request = cursor.execute("SELECT continent_name FROM Continents")
-    answer = request.fetchall()
-    return answer
 
-def get_countries():
-    """
-    SQL request selecting every countries
-    :return: list of country_name from data base "bdd.db"
-    """
-    request = cursor.execute("SELECT country_name FROM Countries")
-    answer = request.fetchall()
-    return answer
 
-sql_continents = get_continents()
-sql_countries = get_countries()
 
 class Ui_MainWindow(object):
+    def loadData(self):
+        self.connection = sqlite3.connect("bdd.db")
+        self.cursor = self.connection.cursor()
+
+    def get_continents(self):
+        """
+        SQL request selecting every continents
+        :return: list of continent_name from data base "bdd.db"
+        """
+        query = self.cursor.execute("SELECT continent_name FROM Continents")
+        answer = query.fetchall()
+        return answer
+
+    def get_countries(self):
+        """
+        SQL request selecting every countries
+        :return: list of country_name from data base "bdd.db"
+        """
+        query = self.cursor.execute("SELECT country_name FROM Countries")
+        answer = query.fetchall()
+        return answer
+
     def setupUi(self, MainWindow):
+        self.loadData()
+        self.sql_continents = self.get_continents()
+        self.sql_countries = self.get_countries()
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(797, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -64,6 +69,7 @@ class Ui_MainWindow(object):
         self.comboBox_LOC.setObjectName("comboBox_LOC")
         self.init_combo_Box(self.comboBox_LOC, "continent")
         self.verticalLayout_LOC.addWidget(self.comboBox_LOC)
+        #self.comboBox_LOC.currentTextChanged.connect(self.combo_LOC_changed)
         # END Vertical Layout Widget LOC 1
 
         # Scroll Area Widget LOC
@@ -82,11 +88,9 @@ class Ui_MainWindow(object):
         self.gridLayout_LOC.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_LOC.setObjectName("gridLayout_LOC")
 
-        self.tableView_LOC = QtWidgets.QTableView(self.gridLayoutWidget_2)
-        self.tableView_LOC.setObjectName("tableView_LOC")
-        self.tableView_LOC.showGrid()
-        #self.tableView_LOC.setColumnCount(5)
-        self.gridLayout_LOC.addWidget(self.tableView_LOC, 0, 0, 1, 1)
+        self.tableWidget_LOC = QtWidgets.QTableWidget(self.gridLayoutWidget_2)
+        self.tableWidget_LOC.setObjectName("tableView_LOC")
+        self.gridLayout_LOC.addWidget(self.tableWidget_LOC, 0, 0, 1, 1)
 
         self.scrollArea_LOC.setWidget(self.scrollAreaWidgetContents)
         #END Scroll Area Widget LOC
@@ -95,6 +99,7 @@ class Ui_MainWindow(object):
         self.search_button_LOC = QtWidgets.QPushButton(self.tab_LOC)
         self.search_button_LOC.setGeometry(QtCore.QRect(560, 70, 75, 23))
         self.search_button_LOC.setObjectName("search_button_LOC")
+        self.search_button_LOC.clicked.connect(self.combo_LOC_changed)
         #END search button LOC
 
         self.tabWidget.addTab(self.tab_LOC, "")
@@ -128,6 +133,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_SO_1.addWidget(self.comboBox_SO_Country)
         # END Vertical Layout Widget SO 1
 
+        # Vertical Layout Widget SO 2
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.tab_SO)
         self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(150, 150, 61, 51))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
@@ -141,10 +147,12 @@ class Ui_MainWindow(object):
         self.label_SO_Country = QtWidgets.QLabel(self.verticalLayoutWidget_2)
         self.label_SO_Country.setObjectName("label_SO_Country")
         self.verticalLayout_SO_2.addWidget(self.label_SO_Country)
+        # END Vertical Layout Widget SO 2
 
         self.search_button_SO = QtWidgets.QPushButton(self.tab_SO)
         self.search_button_SO.setGeometry(QtCore.QRect(570, 230, 75, 23))
         self.search_button_SO.setObjectName("search_button_SO")
+
         self.label_SO_research_return = QtWidgets.QLabel(self.tab_SO)
         self.label_SO_research_return.setGeometry(QtCore.QRect(130, 290, 511, 131))
         self.label_SO_research_return.setAlignment(QtCore.Qt.AlignCenter)
@@ -192,15 +200,54 @@ class Ui_MainWindow(object):
 
         comboBox.addItem(None)
         if Item_type == "continent":
-            for i in range(len(sql_continents)):
-                comboBox.addItem(sql_continents[i][0])
+            for i in range(len(self.sql_continents)):
+                comboBox.addItem(self.sql_continents[i][0])
         elif Item_type == "country":
-            for i in range(len(sql_countries)):
-                comboBox.addItem(sql_countries[i][0])
+            for i in range(len(self.sql_countries)):
+                comboBox.addItem(self.sql_countries[i][0])
         else :
             index = comboBox.findText(None)
             comboBox.removeItem(index)
             print("Item_type is not 'continent' or 'country' please check your input")
+
+    def n_columns(self, continent):
+        columns = continent.get_countries_number()/5
+        if type(columns) == int :
+            return columns
+        elif type(columns) == float :
+            columns += 1
+            return columns
+
+    def n_rows(self, n_columns):
+        rows = n_columns/5
+        if type(rows) == int :
+            return rows
+        elif type(rows) == float :
+            rows += 1
+            return rows
+        else :
+            print("n_columns input type should be 'int' type")
+
+    def combo_LOC_changed(self):
+        text = self.comboBox_LOC.currentText()
+        if (text == "") or (text == "Antarctica") :
+            print("Nothing shown")
+            return
+        elif text == "Africa" :
+            print("African countries Table shown")
+        elif text == "Asia" :
+            print("Asian countries Table shown")
+        elif text == "Europe" :
+            print("European countries Table shown")
+        elif text == "North-America" :
+            print("North american countries Table shown")
+        elif text == "Oceania" :
+            print("Oceanian countries Table shown")
+        elif text == "South-America" :
+            print("South american countries Table shown")
+
+    #def tableView_LOC_built(self, continent):
+
 
 if __name__ == "__main__":
     import sys
@@ -209,5 +256,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    connection.close()
+    ui.connection.close()
     sys.exit(app.exec_())

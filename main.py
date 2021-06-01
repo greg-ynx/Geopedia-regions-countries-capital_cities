@@ -14,8 +14,8 @@ from mainwindow import Ui_MainWindow
 
 if __name__ == '__main__':
     import sys
-    connection = sqlite3.connect("bdd.db")
-    cursor = connection.cursor()
+    #connection = sqlite3.connect("bdd.db")
+    #cursor = connection.cursor()
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
