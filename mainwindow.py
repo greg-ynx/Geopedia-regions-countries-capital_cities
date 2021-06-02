@@ -95,7 +95,7 @@ class Ui_MainWindow(object):
         self.search_button_LOC = QtWidgets.QPushButton(self.tab_LOC)
         self.search_button_LOC.setGeometry(QtCore.QRect(560, 70, 75, 23))
         self.search_button_LOC.setObjectName("search_button_LOC")
-        self.search_button_LOC.clicked.connect(self.combo_LOC_changed)
+        self.search_button_LOC.clicked.connect(self.comboBox_LOC_changed)
         #END search button LOC
 
         self.tabWidget.addTab(self.tab_LOC, "")
@@ -218,7 +218,7 @@ class Ui_MainWindow(object):
         else :
             print("n_columns input type should be 'int' type")
 
-    def combo_LOC_changed(self):
+    def comboBox_LOC_changed(self):
         text = self.comboBox_LOC.currentText()
         if (text == "") or (text == "Antarctica") :
             self.tableWidget_LOC.setColumnCount(0)
