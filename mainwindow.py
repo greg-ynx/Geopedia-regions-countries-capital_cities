@@ -207,6 +207,7 @@ class Ui_MainWindow(object):
             print("Item_type is not 'continent' or 'country' please check your input")
 
     def n_rows(self, continent):
+        # Check si le nombre est pair ou non !!!
         print("{} countries count is : {}".format(continent.name, continent.get_countries_count()))
         rows = continent.get_countries_count()/4
         if type(rows) == int :
@@ -220,23 +221,34 @@ class Ui_MainWindow(object):
     def combo_LOC_changed(self):
         text = self.comboBox_LOC.currentText()
         if (text == "") or (text == "Antarctica") :
+            self.tableWidget_LOC.setColumnCount(0)
+            self.tableWidget_LOC.setRowCount(0)
             print("Nothing shown")
             return
         elif text == "Africa" :
             self.africa = Continent('Africa')
             print("African countries Table shown")
-            print(self.africa.get_countries_count())
             self.tableWidget_LOC_built(self.africa)
         elif text == "Asia" :
+            self.asia = Continent('Asia')
             print("Asian countries Table shown")
+            self.tableWidget_LOC_built(self.asia)
         elif text == "Europe" :
+            self.europe = Continent('Europe')
             print("European countries Table shown")
+            self.tableWidget_LOC_built(self.europe)
         elif text == "North-America" :
+            self.north_america = Continent('North-America')
             print("North american countries Table shown")
+            self.tableWidget_LOC_built(self.north_america)
         elif text == "Oceania" :
+            self.oceania = Continent('Oceania')
             print("Oceanian countries Table shown")
+            self.tableWidget_LOC_built(self.oceania)
         elif text == "South-America" :
+            self.south_america = Continent('South-America')
             print("South american countries Table shown")
+            self.tableWidget_LOC_built(self.south_america)
 
     def tableWidget_LOC_built(self, continent):
         index = 0
@@ -249,7 +261,6 @@ class Ui_MainWindow(object):
             for column in range(columnsCount):
                 if index <= index_max :
                     self.tableWidget_LOC.setItem(row, column, QtWidgets.QTableWidgetItem(continent.get_countries()[index][0]))
-                    print(index)
                 else :
                     self.tableWidget_LOC.setItem(row, column, QtWidgets.QTableWidgetItem(""))
                 index +=1
