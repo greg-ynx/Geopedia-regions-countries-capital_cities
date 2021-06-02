@@ -4,10 +4,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from continent import Continent
 from country import Country
 
-
-
-
-
 class Ui_MainWindow(object):
     def loadData(self):
         self.connection = sqlite3.connect("bdd.db")
@@ -210,16 +206,9 @@ class Ui_MainWindow(object):
             comboBox.removeItem(index)
             print("Item_type is not 'continent' or 'country' please check your input")
 
-    def n_columns(self, continent):
-        columns = continent.get_countries_number()/5
-        if type(columns) == int :
-            return columns
-        elif type(columns) == float :
-            columns += 1
-            return columns
-
-    def n_rows(self, n_columns):
-        rows = n_columns/5
+    def n_rows(self, continent):
+        print("{} countries count is : {}".format(continent.name, continent.get_countries_number()))
+        rows = continent.get_countries_number()/5
         if type(rows) == int :
             return rows
         elif type(rows) == float :
@@ -234,7 +223,10 @@ class Ui_MainWindow(object):
             print("Nothing shown")
             return
         elif text == "Africa" :
+            africa = Continent('Africa')
             print("African countries Table shown")
+            print(africa.get_countries_number())
+            self.tableView_LOC_built(africa)
         elif text == "Asia" :
             print("Asian countries Table shown")
         elif text == "Europe" :
@@ -246,8 +238,10 @@ class Ui_MainWindow(object):
         elif text == "South-America" :
             print("South american countries Table shown")
 
-    #def tableView_LOC_built(self, continent):
-
+    def tableView_LOC_built(self, continent):
+        columnsCount = 5
+        rowsCount = self.n_rows(continent)
+        self.tableWidget_LOC.horizontalHeader().hide()
 
 if __name__ == "__main__":
     import sys

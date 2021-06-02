@@ -11,7 +11,6 @@ class Continent:
         query = self.cursor.execute("SELECT id_continent FROM Continents WHERE continent_name = '{}'".format(self.name))
         answer = query.fetchone()
         self.connection.close()
-        print(answer)
         return answer
 
     def get_countries(self):
@@ -20,17 +19,15 @@ class Continent:
         query = self.cursor.execute("SELECT country_name FROM Countries WHERE country_continent = '{}'".format(self.name))
         answer = query.fetchall()
         self.connection.close()
-        print(answer)
         return answer
 
     def get_countries_number(self):
         self.connection = sqlite3.connect("bdd.db")
         self.cursor = self.connection.cursor()
-        query = self.cursor.execute("SELECT number_of_countries FROM Continents WHERE continent_name = '{}'".format(self.name))
+        query = self.cursor.execute("SELECT continent_number_of_countries FROM Continents WHERE continent_name = '{}'".format(self.name))
         answer = query.fetchone()
         self.connection.close()
-        print(answer)
-        return answer
+        return answer[0]
 
     def get_capital_cities(self):
         self.connection = sqlite3.connect("bdd.db")
@@ -38,5 +35,4 @@ class Continent:
         query = self.cursor.execute("SELECT country_capital_city FROM Countries WHERE country_continent = '{}'".format(self.name))
         answer = query.fetchone()
         self.connection.close()
-        print(answer)
         return answer
