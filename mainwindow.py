@@ -207,12 +207,12 @@ class Ui_MainWindow(object):
             print("Item_type is not 'continent' or 'country' please check your input")
 
     def n_rows(self, continent):
-        print("{} countries count is : {}".format(continent.name, continent.get_countries_number()))
-        rows = continent.get_countries_number()/5
+        print("{} countries count is : {}".format(continent.name, continent.get_countries_count()))
+        rows = continent.get_countries_count()/4
         if type(rows) == int :
             return rows
         elif type(rows) == float :
-            rows += 1
+            rows = int(rows+1)
             return rows
         else :
             print("n_columns input type should be 'int' type")
@@ -223,10 +223,10 @@ class Ui_MainWindow(object):
             print("Nothing shown")
             return
         elif text == "Africa" :
-            africa = Continent('Africa')
+            self.africa = Continent('Africa')
             print("African countries Table shown")
-            print(africa.get_countries_number())
-            self.tableView_LOC_built(africa)
+            print(self.africa.get_countries_count())
+            self.tableWidget_LOC_built(self.africa)
         elif text == "Asia" :
             print("Asian countries Table shown")
         elif text == "Europe" :
@@ -238,10 +238,23 @@ class Ui_MainWindow(object):
         elif text == "South-America" :
             print("South american countries Table shown")
 
-    def tableView_LOC_built(self, continent):
-        columnsCount = 5
+    def tableWidget_LOC_built(self, continent):
+        index = 0
+        index_max = continent.get_countries_count() - 1
+        columnsCount = 4
         rowsCount = self.n_rows(continent)
+        self.tableWidget_LOC.setColumnCount(columnsCount)
+        self.tableWidget_LOC.setRowCount(rowsCount)
+        for row in range(rowsCount):
+            for column in range(columnsCount):
+                if index <= index_max :
+                    self.tableWidget_LOC.setItem(row, column, QtWidgets.QTableWidgetItem(continent.get_countries()[index][0]))
+                    print(index)
+                else :
+                    self.tableWidget_LOC.setItem(row, column, QtWidgets.QTableWidgetItem(""))
+                index +=1
         self.tableWidget_LOC.horizontalHeader().hide()
+        self.tableWidget_LOC.verticalHeader().hide()
 
 if __name__ == "__main__":
     import sys

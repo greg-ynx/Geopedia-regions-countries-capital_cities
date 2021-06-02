@@ -21,7 +21,7 @@ class Continent:
         self.connection.close()
         return answer
 
-    def get_countries_number(self):
+    def get_countries_count(self):
         self.connection = sqlite3.connect("bdd.db")
         self.cursor = self.connection.cursor()
         query = self.cursor.execute("SELECT continent_number_of_countries FROM Continents WHERE continent_name = '{}'".format(self.name))
