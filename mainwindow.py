@@ -210,9 +210,9 @@ class Ui_MainWindow(object):
         # Check si le nombre est pair ou non !!!
         print("{} countries count is : {}".format(continent.name, continent.get_countries_count()))
         rows = continent.get_countries_count()/4
-        if type(rows) == int :
-            return rows
-        elif type(rows) == float :
+        if (rows*4)%4 == 0 :
+            return int(rows)
+        elif (rows*4)%4 != 0 :
             rows = int(rows+1)
             return rows
         else :
@@ -255,6 +255,7 @@ class Ui_MainWindow(object):
         index_max = continent.get_countries_count() - 1
         columnsCount = 4
         rowsCount = self.n_rows(continent)
+        print(rowsCount)
         self.tableWidget_LOC.setColumnCount(columnsCount)
         self.tableWidget_LOC.setRowCount(rowsCount)
         for row in range(rowsCount):
