@@ -11,7 +11,7 @@ class Ui_MainWindow(object):
 
     def get_continents(self):
         """
-        SQL request selecting every continents
+        SQL query selecting every continents
         :return: list of continent_name from data base "bdd.db"
         """
         query = self.cursor.execute("SELECT continent_name FROM Continents")
@@ -20,7 +20,7 @@ class Ui_MainWindow(object):
 
     def get_countries(self):
         """
-        SQL request selecting every countries
+        SQL query selecting every countries
         :return: list of country_name from data base "bdd.db"
         """
         query = self.cursor.execute("SELECT country_name FROM Countries")
@@ -29,6 +29,13 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
         self.loadData()
+        self.africa = Continent('Africa')
+        self.asia = Continent('Asia')
+        self.europe = Continent('Europe')
+        self.north_america = Continent('North-America')
+        self.oceania = Continent('Oceania')
+        self.south_america = Continent('South-America')
+        self.antarctica = Continent('Antarctica')
         self.sql_continents = self.get_continents()
         self.sql_countries = self.get_countries()
         MainWindow.setObjectName("MainWindow")
@@ -122,6 +129,7 @@ class Ui_MainWindow(object):
         self.comboBox_SO_Continent.setObjectName("comboBox_SO_Continent")
         self.init_combo_Box(self.comboBox_SO_Continent, "continent")
         self.verticalLayout_SO_1.addWidget(self.comboBox_SO_Continent)
+        self.comboBox_SO_Continent.currentTextChanged.connect(self.comboBox_SO_Continent_changed)
 
         self.comboBox_SO_Country = QtWidgets.QComboBox(self.verticalLayoutWidget)
         self.comboBox_SO_Country.setObjectName("comboBox_SO_Country")
@@ -149,10 +157,13 @@ class Ui_MainWindow(object):
         self.search_button_SO.setGeometry(QtCore.QRect(570, 230, 75, 23))
         self.search_button_SO.setObjectName("search_button_SO")
 
+
         self.label_SO_research_return = QtWidgets.QLabel(self.tab_SO)
         self.label_SO_research_return.setGeometry(QtCore.QRect(130, 290, 511, 131))
         self.label_SO_research_return.setAlignment(QtCore.Qt.AlignCenter)
         self.label_SO_research_return.setObjectName("label_SO_research_return")
+
+        self.search_button_SO.clicked.connect(self.search_button_SO_search)
 
         self.tabWidget.addTab(self.tab_SO, "")
 #END Tab "Search Location"###############################################################################################
@@ -207,7 +218,6 @@ class Ui_MainWindow(object):
             print("Item_type is not 'continent' or 'country' please check your input")
 
     def n_rows(self, continent):
-        # Check si le nombre est pair ou non !!!
         print("{} countries count is : {}".format(continent.name, continent.get_countries_count()))
         rows = continent.get_countries_count()/4
         if (rows*4)%4 == 0 :
@@ -226,27 +236,21 @@ class Ui_MainWindow(object):
             print("Nothing shown")
             return
         elif text == "Africa" :
-            self.africa = Continent('Africa')
             print("African countries Table shown")
             self.tableWidget_LOC_built(self.africa)
         elif text == "Asia" :
-            self.asia = Continent('Asia')
             print("Asian countries Table shown")
             self.tableWidget_LOC_built(self.asia)
         elif text == "Europe" :
-            self.europe = Continent('Europe')
             print("European countries Table shown")
             self.tableWidget_LOC_built(self.europe)
         elif text == "North-America" :
-            self.north_america = Continent('North-America')
             print("North american countries Table shown")
             self.tableWidget_LOC_built(self.north_america)
         elif text == "Oceania" :
-            self.oceania = Continent('Oceania')
             print("Oceanian countries Table shown")
             self.tableWidget_LOC_built(self.oceania)
         elif text == "South-America" :
-            self.south_america = Continent('South-America')
             print("South american countries Table shown")
             self.tableWidget_LOC_built(self.south_america)
 
@@ -261,12 +265,73 @@ class Ui_MainWindow(object):
         for row in range(rowsCount):
             for column in range(columnsCount):
                 if index <= index_max :
-                    self.tableWidget_LOC.setItem(row, column, QtWidgets.QTableWidgetItem(continent.get_countries()[index][0]))
+                    item = QtWidgets.QTableWidgetItem(continent.get_countries()[index][0])
+                    item.setFlags(QtCore.Qt.ItemIsEnabled)
+                    self.tableWidget_LOC.setItem(row, column, item)
                 else :
-                    self.tableWidget_LOC.setItem(row, column, QtWidgets.QTableWidgetItem(""))
+                    item = QtWidgets.QTableWidgetItem("")
+                    item.setFlags(QtCore.Qt.ItemIsEnabled)
+                    self.tableWidget_LOC.setItem(row, column, item)
                 index +=1
+        self.tableWidget_LOC.resizeColumnsToContents()
         self.tableWidget_LOC.horizontalHeader().hide()
         self.tableWidget_LOC.verticalHeader().hide()
+
+    def comboBox_SO_Continent_changed(self):
+        text = self.comboBox_SO_Continent.currentText()
+        if text == "":
+            print("Select a continent")
+            self.comboBox_SO_Continent_select_countries("")
+            return
+        elif text == "Africa":
+            print("Select africans countries")
+            self.comboBox_SO_Continent_select_countries(self.africa)
+        elif text == "Asia":
+            print("Select asians countries")
+            self.comboBox_SO_Continent_select_countries(self.asia)
+        elif text == "Europe":
+            print("Select europeans countries")
+            self.comboBox_SO_Continent_select_countries(self.europe)
+        elif text == "North-America":
+            print("Select north americans countries")
+            self.comboBox_SO_Continent_select_countries(self.north_america)
+        elif text == "Oceania":
+            print("Select oceanians countries")
+            self.comboBox_SO_Continent_select_countries(self.oceania)
+        elif text == "South-America":
+            print("Select south americans countries")
+            self.comboBox_SO_Continent_select_countries(self.south_america)
+        elif text == "Antarctica":
+            print("Select africans countries")
+            self.comboBox_SO_Continent_select_countries(self.antarctica)
+
+    def comboBox_SO_Continent_select_countries(self, continent):
+        self.comboBox_SO_Country.clear()
+        self.comboBox_SO_Country.addItem("")
+        if continent == "":
+            for i in range(len(self.sql_countries)):
+                self.comboBox_SO_Country.addItem(self.sql_countries[i][0])
+        else :
+            for i in range(continent.get_countries_count()):
+                self.comboBox_SO_Country.addItem(continent.get_countries()[i][0])
+
+    def search_button_SO_search(self):
+        continent = self.comboBox_SO_Continent.currentText()
+        country = self.comboBox_SO_Country.currentText()
+        if continent == "":
+            print("Please select a continent")
+            self.label_SO_research_return.setText("Please select a continent")
+            return
+        elif continent == "Antarctica":
+            self.label_SO_research_return.setText("Continent : {}, There is no native country in Antarctica".format(continent))
+            return
+        else :
+            if country == "":
+                self.label_SO_research_return.setText("Please select a country")
+                return
+            else:
+                self.label_SO_research_return.setText("Continent : {}, Country : {}, Capital city : {}".format(continent, country, Country(country).get_capital_city()))
+
 
 if __name__ == "__main__":
     import sys

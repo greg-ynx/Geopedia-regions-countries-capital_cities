@@ -1,3 +1,5 @@
+import sqlite3
+
 class Country:
 
     def __init__(self, name):
@@ -19,7 +21,7 @@ class Country:
         answer = query.fetchone()
         self.connection.close()
         print(answer)
-        return answer
+        return answer[0]
 
     def get_continent(self):
         self.connection = sqlite3.connect("bdd.db")
@@ -28,7 +30,7 @@ class Country:
         answer = query.fetchone()
         self.connection.close()
         print(answer)
-        return answer
+        return answer[0]
 
     def get_continent_id(self):
         self.connection = sqlite3.connect("bdd.db")
