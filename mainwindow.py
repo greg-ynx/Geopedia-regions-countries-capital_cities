@@ -356,15 +356,3 @@ class Ui_MainWindow(object):
                 self.label_SO_research_return.setText("Please select a country")
             else:
                 self.label_SO_research_return.setText("Continent : {}, Country : {}, Capital city : {}".format(Country(country).get_continent(), country, Country(country).get_capital_city()))
-
-"""
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    ui.connection.close()
-    sys.exit(app.exec_())
-"""
