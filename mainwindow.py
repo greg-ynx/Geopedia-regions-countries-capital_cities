@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import sqlite3
 from PyQt5 import QtCore, QtGui, QtWidgets
 from continent import Continent
@@ -6,6 +5,9 @@ from country import Country
 
 class Ui_MainWindow(object):
     def loadData(self):
+        """
+        Connect program with "bdd.db" file
+        """
         self.connection = sqlite3.connect("bdd.db")
         self.cursor = self.connection.cursor()
 
@@ -93,6 +95,7 @@ class Ui_MainWindow(object):
 
         self.tableWidget_LOC = QtWidgets.QTableWidget(self.gridLayoutWidget_2)
         self.tableWidget_LOC.setObjectName("tableView_LOC")
+        self.tableWidget_LOC.setFont(QtGui.QFont('Arial',8))
         self.gridLayout_LOC.addWidget(self.tableWidget_LOC, 0, 0, 1, 1)
 
         self.scrollArea_LOC.setWidget(self.scrollAreaWidgetContents)
@@ -204,7 +207,6 @@ class Ui_MainWindow(object):
         :param Item_type: Please input "continent" or "country"
         :return: nothing
         """
-
         comboBox.addItem(None)
         if Item_type == "continent":
             for i in range(len(self.sql_continents)):
@@ -218,6 +220,12 @@ class Ui_MainWindow(object):
             print("Item_type is not 'continent' or 'country' please check your input")
 
     def n_rows(self, continent):
+        """
+        Define how many rows are needed for the TableWidget
+        :param continent: Continent() object
+        :return: rows : int
+            Rows count needed
+        """
         print("{} countries count is : {}".format(continent.name, continent.get_countries_count()))
         rows = continent.get_countries_count()/4
         if (rows*4)%4 == 0 :
@@ -229,6 +237,9 @@ class Ui_MainWindow(object):
             print("n_columns input type should be 'int' type")
 
     def comboBox_LOC_changed(self):
+        """
+        Generate TableWidget_LOC items for any selected continent
+        """
         text = self.comboBox_LOC.currentText()
         if (text == "") or (text == "Antarctica") :
             self.tableWidget_LOC.setColumnCount(0)
@@ -255,17 +266,24 @@ class Ui_MainWindow(object):
             self.tableWidget_LOC_built(self.south_america)
 
     def tableWidget_LOC_built(self, continent):
+        """
+        Generate rows, columns and item of TableWidget_LOC
+        :param continent: Continent() object
+        """
         index = 0
         index_max = continent.get_countries_count() - 1
         columnsCount = 4
         rowsCount = self.n_rows(continent)
         print(rowsCount)
         self.tableWidget_LOC.setColumnCount(columnsCount)
+        for column in range(columnsCount):
+            self.tableWidget_LOC.setColumnWidth(column, 182.25)
         self.tableWidget_LOC.setRowCount(rowsCount)
         for row in range(rowsCount):
             for column in range(columnsCount):
                 if index <= index_max :
                     item = QtWidgets.QTableWidgetItem(continent.get_countries()[index][0])
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
                     item.setFlags(QtCore.Qt.ItemIsEnabled)
                     self.tableWidget_LOC.setItem(row, column, item)
                 else :
@@ -273,11 +291,13 @@ class Ui_MainWindow(object):
                     item.setFlags(QtCore.Qt.ItemIsEnabled)
                     self.tableWidget_LOC.setItem(row, column, item)
                 index +=1
-        self.tableWidget_LOC.resizeColumnsToContents()
         self.tableWidget_LOC.horizontalHeader().hide()
         self.tableWidget_LOC.verticalHeader().hide()
 
     def comboBox_SO_Continent_changed(self):
+        """
+        Select countries that are within the selected continent
+        """
         text = self.comboBox_SO_Continent.currentText()
         if text == "":
             print("Select a continent")
@@ -306,6 +326,10 @@ class Ui_MainWindow(object):
             self.comboBox_SO_Continent_select_countries(self.antarctica)
 
     def comboBox_SO_Continent_select_countries(self, continent):
+        """
+        Modify comboBox_SO_Country in order to show the new list of selectable countries
+        :param continent: Continent() object
+        """
         self.comboBox_SO_Country.clear()
         self.comboBox_SO_Country.addItem("")
         if continent == "":
@@ -316,23 +340,24 @@ class Ui_MainWindow(object):
                 self.comboBox_SO_Country.addItem(continent.get_countries()[i][0])
 
     def search_button_SO_search(self):
+        """
+        Write research results for 'Search Location'
+        """
         continent = self.comboBox_SO_Continent.currentText()
         country = self.comboBox_SO_Country.currentText()
-        if continent == "":
-            print("Please select a continent")
-            self.label_SO_research_return.setText("Please select a continent")
-            return
+        if (continent == "") and (country == ""):
+            print("Please select a continent or a country")
+            self.label_SO_research_return.setText("Please select a continent or a country")
         elif continent == "Antarctica":
             self.label_SO_research_return.setText("Continent : {}, There is no native country in Antarctica".format(continent))
-            return
         else :
             if country == "":
+                print("Please select a country")
                 self.label_SO_research_return.setText("Please select a country")
-                return
             else:
-                self.label_SO_research_return.setText("Continent : {}, Country : {}, Capital city : {}".format(continent, country, Country(country).get_capital_city()))
+                self.label_SO_research_return.setText("Continent : {}, Country : {}, Capital city : {}".format(Country(country).get_continent(), country, Country(country).get_capital_city()))
 
-
+"""
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -342,3 +367,4 @@ if __name__ == "__main__":
     MainWindow.show()
     ui.connection.close()
     sys.exit(app.exec_())
+"""
