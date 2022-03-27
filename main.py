@@ -1,13 +1,10 @@
-# Main file
-from PyQt5 import QtWidgets, QtGui
-from mainwindow import Ui_MainWindow
+# This script is the main executable script for Geopedia project.
+#
+# Author : greg-ynx
+
+def main():
+    print('Hello world!')
+
 
 if __name__ == '__main__':
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    MainWindow.setWindowIcon(QtGui.QIcon("LogoBlackCwHITE.ico"))
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+    main()
