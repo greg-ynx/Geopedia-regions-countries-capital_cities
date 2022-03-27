@@ -1,0 +1,6 @@
+If you encounter an issue with Pattern Builder's features, please open an issue on GitHub.
+    -> link : https://github.com/greg-ynx/Geopedia-regions-countries-capital_cities
+
+You can also directly tell me about your issue on my mail address : <gregory.ployartwork@gmail.com>
+
+greg-ynx
