@@ -9,14 +9,28 @@
 import sys
 import os
 import webbrowser
+import pygal
 
 from config.definitions import img_dir, txt_dir
 from src.app.ui.AboutForm.AboutForm import UiAboutForm
-from PyQt5 import QtCore, QtGui, QtWidgets, QtSvg
+from PyQt5 import QtCore, QtGui, QtWidgets, QtSvg, QtWebEngineWidgets
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QWidget, QLabel
 
 
 def redirect_to_github_repo():
     webbrowser.open('https://github.com/greg-ynx/Geopedia-regions-countries-capital_cities')
+
+
+class ImageWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.show_image()
+
+    def show_image(self, img):
+        image = QPixmap(img)
+        label = QLabel(self)
+        label.setPixmap(image)
 
 
 class MainWindow(object):
@@ -94,8 +108,10 @@ class MainWindow(object):
         self.region_comboBox = QtWidgets.QComboBox(self.tab_location_browser)
         self.region_comboBox.setObjectName("region_comboBox")
         self.gridLayout_2.addWidget(self.region_comboBox, 2, 0, 1, 1)
+
         self.svg_widget = QtSvg.QSvgWidget(self.tab_location_browser)
         self.svg_widget.setObjectName("svg_widget")
+
         self.gridLayout_2.addWidget(self.svg_widget, 4, 0, 1, 3)
         self.tab_widget.addTab(self.tab_location_browser, "")
         self.tab_countries_list = QtWidgets.QWidget()
@@ -166,6 +182,19 @@ class MainWindow(object):
         self.menuHelp.addSeparator()
         self.menuHelp.addAction(self.action_Join_us_on_GitHub)
         self.menubar.addAction(self.menuHelp.menuAction())
+
+        supra = pygal.maps.world.SupranationalWorld()
+        supra.add('Asia', [('asia', 1)])
+        supra.add('Europe', [('europe', 1)])
+        supra.add('Africa', [('africa', 1)])
+        supra.add('North america', [('north_america', 1)])
+        supra.add('South america', [('south_america', 1)])
+        supra.add('Oceania', [('oceania', 1)])
+        supra.add('Antartica', [('antartica', 1)])
+
+        data = supra.render_to_file('c.svg')
+        #print(data)
+        #self.svg_widget.load(data)
 
         self.retranslateUi(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
