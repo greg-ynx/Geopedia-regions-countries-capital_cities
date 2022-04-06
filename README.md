@@ -22,7 +22,7 @@ Select a region (continent) among these :
 
 The map reloads and highlight all countries part the selected region.
 
-#### Country selection
+#### Country
 Select a country among 250 countries / states and territories available !
 
 The map reloads and highlight the selected country.
