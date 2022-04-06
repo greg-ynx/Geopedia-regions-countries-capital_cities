@@ -1,8 +1,8 @@
 import os
-import pygal
 import cairosvg
 
 from pygal import Config
+from pygal_maps_world.maps import World, SupranationalWorld
 from config.definitions import map_dir
 
 file_name = 'temp_map.svg'
@@ -17,7 +17,7 @@ def _config():
 
 def map_init():
     f = _config()
-    c_map = pygal.maps.world.SupranationalWorld(f)
+    c_map = SupranationalWorld(f)
     c_map.add('', [''])
     c_map.render_to_file(map_path)
     cairosvg.svg2svg(url=map_path, write_to=map_path)
@@ -25,7 +25,7 @@ def map_init():
 
 def select_continent(continent):
     f = _config()
-    c_map = pygal.maps.world.SupranationalWorld(f)
+    c_map = SupranationalWorld(f)
     c = ''
     match continent:
         case 'Asia':
@@ -47,7 +47,7 @@ def select_continent(continent):
 
 def select_country(country_tld):
     f = _config()
-    c_map = pygal.maps.world.World(f)
+    c_map = World(f)
     c_map.add('', [country_tld])
     c_map.render_to_file(map_path)
     cairosvg.svg2svg(url=map_path, write_to=map_path)

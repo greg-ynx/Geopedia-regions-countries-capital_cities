@@ -31,7 +31,7 @@ The map reloads and highlight the selected country.
 If you ever wanted to know the name of each country's capitals !
 
 ### Data Base 
-Second tab shows our data base used for this application. Currently, we are using a json file from dr5hn
+Second tab shows our database used for this application. Currently, we are using a json file from dr5hn
 countries-states-cities-database repository on GitHub(Thank you!).
 
 ![Data-base](readme/geopedia-database-screen.png)
