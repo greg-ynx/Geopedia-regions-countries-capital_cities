@@ -10,6 +10,7 @@ ui_dir = os.path.join(app_dir, 'ui')
 assets_dir = os.path.join(src_dir, 'assets')
 data_dir = os.path.join(assets_dir, 'data')
 img_dir = os.path.join(assets_dir, 'img')
+map_dir = os.path.join(assets_dir, 'map')
 txt_dir = os.path.join(assets_dir, 'txt')
 
 CSIDL_PERSONAL = 5
