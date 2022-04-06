@@ -5,14 +5,13 @@
 import sys
 
 from PyQt5 import QtWidgets
-from src.app.ui import MainWindow
+from src.app.ui.MainWindow import MainWindow
 
 
 def main():
-
     app = QtWidgets.QApplication(sys.argv)
     window = QtWidgets.QMainWindow()
-    ui = MainWindow(window)
+    ui = MainWindow.MainWindow(window)
     window.show()
     sys.exit(app.exec_())
 

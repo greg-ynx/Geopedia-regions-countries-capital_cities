@@ -1,12 +1,53 @@
+import os
 import pygal
+import cairosvg
+
+from pygal import Config
+from config.definitions import map_dir
+
+file_name = 'temp_map.svg'
+map_path = os.path.join(map_dir, file_name)
 
 
-supra = pygal.maps.world.SupranationalWorld()
-supra.add('Asia', [('asia', 1)])
-supra.add('Europe', [('europe', 1)])
-supra.add('Africa', [('africa', 1)])
-supra.add('North america', [('north_america', 1)])
-supra.add('South america', [('south_america', 1)])
-supra.add('Oceania', [('oceania', 1)])
-supra.add('Antartica', [('antartica', 1)])
-supra.render()
+def _config():
+    config = Config()
+    config.show_legend = False
+    return config
+
+
+def map_init():
+    f = _config()
+    c_map = pygal.maps.world.SupranationalWorld(f)
+    c_map.add('', [''])
+    c_map.render_to_file(map_path)
+    cairosvg.svg2svg(url=map_path, write_to=map_path)
+
+
+def select_continent(continent):
+    f = _config()
+    c_map = pygal.maps.world.SupranationalWorld(f)
+    c = ''
+    match continent:
+        case 'Asia':
+            c = ['asia']
+        case 'Europe':
+            c = ['europe']
+        case 'Africa':
+            c = ['africa']
+        case 'Americas':
+            c = [('north_america'), ('south_america')]
+        case 'Oceania':
+            c = ['oceania']
+        case 'Polar':
+            c = ['antartica']
+    c_map.add('', c)
+    c_map.render_to_file(map_path)
+    cairosvg.svg2svg(url=map_path, write_to=map_path)
+
+
+def select_country(country_tld):
+    f = _config()
+    c_map = pygal.maps.world.World(f)
+    c_map.add('', [country_tld])
+    c_map.render_to_file(map_path)
+    cairosvg.svg2svg(url=map_path, write_to=map_path)
